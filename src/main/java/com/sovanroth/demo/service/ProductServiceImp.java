@@ -35,4 +35,15 @@ public class ProductServiceImp implements ProductService {
             throw e;
         }
     }
+
+    @Override
+    public List<ProductEntity> searchByName(String name) {
+        try {
+
+            List<ProductEntity> res = productRepository.findByNameContainingIgnoreCase(name);
+            return res;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
 }

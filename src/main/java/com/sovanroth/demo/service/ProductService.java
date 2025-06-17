@@ -11,4 +11,5 @@ public interface ProductService {
 
     ProductEntity createProduct(ProductEntity request);
     List<ProductEntity> getAllProducts();
+    List<ProductEntity> searchByName(String name);
 }
