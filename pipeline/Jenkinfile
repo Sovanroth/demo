@@ -35,20 +35,15 @@ pipeline {
             }
         }
 
-        stage('Deploy to Openshift ') {
+         stage('Deploy to Openshift ') {
             steps {
-                withKubeConfig(
-                credentialsId: 'oc-auth',
-                restrictKubeConfigAccess: false,
-                serverUrl: "https://host.docker.internal:6443") {
-                    script {
-                        sh "yq -i '.spec.template.spec.containers[0].image = \"${env.registryUser}/spring-demo-app:${env.imageTag}\"' pipeline/deployment.yaml"
-                        sh '''
-                            for file in pipeline/*.yaml; do
-                                envsubst < "$file" | kubectl apply -f - -n micro-service --validate=false
-                            done
-                        '''
-                    }
+                 script {
+                    sh "yq -i '.spec.template.spec.containers[0].image = \"${env.registryUser}/spring-demo-app:${env.imageTag}\"' pipeline/deployment.yaml"
+                    sh '''
+                        for file in pipeline/*.yaml; do
+                            envsubst < "$file" | kubectl apply -f - -n micro-service --validate=false
+                        done
+                    '''
                 }
             }
         }
