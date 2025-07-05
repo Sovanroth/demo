@@ -42,7 +42,7 @@ pipeline {
                 restrictKubeConfigAccess: false,
                 serverUrl: "https://api.crc.testing:6443") {
                     script {
-                        sh "yq eval '.spec.template.spec.containers[0].image = \"${env.registryUser}/spring-demo-app:${env.imageTag}\"' -i ./pipeline/deployment.yaml"
+                        sh "yq eval '.spec.template.spec.containers[0].image = \"${env.registryUser}/spring-demo-app:${env.imageTag}\"' -i pipeline/deployment.yaml"
                         sh '''
                             for file in ./pipeline/*.yaml; do
                                 envsubst < "$file" | kubectl apply -f - -n micro-service
