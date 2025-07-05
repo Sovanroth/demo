@@ -40,7 +40,7 @@ pipeline {
                 withKubeConfig(
                 credentialsId: 'oc-auth',
                 restrictKubeConfigAccess: false,
-                serverUrl: "https://api.crc.testing:6443") {
+                serverUrl: "https://host.docker.internal:6443") {
                     script {
                         sh "yq -i '.spec.template.spec.containers[0].image = \"${env.registryUser}/spring-demo-app:${env.imageTag}\"' pipeline/deployment.yaml"
                         sh '''
