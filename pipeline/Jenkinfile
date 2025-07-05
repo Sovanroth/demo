@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+
+    environment {
+        imageTag = "${BUILD_NUMBER}"
+        registryUser = "eobard"
+    }
+
         tools {
             maven 'maven-latest'  // or whatever name you configured in Jenkins > Global Tools
         }
@@ -9,6 +15,12 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 sh 'mvn clean package -DskipTests'
+            }
+        }
+
+        stage('Build Image'){
+            steps{
+                sh "docker build -t ${env.registryUser}/spring-demo-app:${env.imageTag} ."
             }
         }
     }
