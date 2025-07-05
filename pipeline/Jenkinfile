@@ -23,5 +23,16 @@ pipeline {
                 sh "docker build -t ${env.registryUser}/spring-demo-app:${env.imageTag} ."
             }
         }
+
+        stage('Push to Registry'){
+            steps{
+                withCredentials([usernamePassword(credentialsId: 'docker-hub-auth', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                    sh """
+                        docker login -u $USER -p $PASS
+                        docker push $USER/spring-demo-app:${env.imageTag}
+                    """
+                }
+            }
+        }
     }
 }
