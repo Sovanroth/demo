@@ -7,9 +7,9 @@ pipeline {
         registryUser = "eobard"
     }
 
-        tools {
-            maven 'maven-latest'  // or whatever name you configured in Jenkins > Global Tools
-        }
+    tools {
+        maven 'maven-latest'  // or whatever name you configured in Jenkins > Global Tools
+    }
 
     stages {
         stage('Build with Maven') {
@@ -31,6 +31,24 @@ pipeline {
                         docker login -u $USER -p $PASS
                         docker push $USER/spring-demo-app:${env.imageTag}
                     """
+                }
+            }
+        }
+
+        stage('Deploy to Openshift ') {
+            steps {
+                withKubeConfig(
+                credentialsId: 'oc-auth',
+                restrictKubeConfigAccess: false,
+                serverUrl: "https://api.crc.testing:6443") {
+                    script {
+                        sh "yq eval '.spec.template.spec.containers[0].image = \"${env.registryUser}/spring-demo-app:${env.imageTag}\"' -i ./pipeline/*deployment.yaml"
+                        sh '''
+                            for file in ./pipeline/*.yaml; do
+                                envsubst < "$file" | kubectl apply -f - -n micro-service
+                            done
+                        '''
+                    }
                 }
             }
         }
