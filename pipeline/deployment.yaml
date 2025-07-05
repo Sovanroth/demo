@@ -13,6 +13,7 @@ spec:
         app: demo-app
     spec:
       restartPolicy: Always
+      serviceAccountName: admin
       schedulerName: default-scheduler
       terminationGracePeriodSeconds: 30
       securityContext: {}
@@ -26,6 +27,7 @@ spec:
           terminationMessagePolicy: File
           image: >-
             {IMAGE}
+      serviceAccount: admin
       dnsPolicy: ClusterFirst
   strategy:
     type: RollingUpdate
