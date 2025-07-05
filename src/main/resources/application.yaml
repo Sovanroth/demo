@@ -13,3 +13,17 @@ spring:
       ddl-auto: none
     show-sql: true
     database-platform: org.hibernate.dialect.OracleDialect
+
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health, prometheus
+    endpoint:
+      prometheus:
+        enabled: true
+    metrics:
+      export:
+        prometheus:
+          enabled: true
+
