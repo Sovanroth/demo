@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+        tools {
+            maven 'maven-latest'  // or whatever name you configured in Jenkins > Global Tools
+        }
+
     stages {
         stage('Build with Maven') {
             steps {
